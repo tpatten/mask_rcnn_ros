@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import os
 import threading
 from Queue import Queue
@@ -59,7 +60,7 @@ class MaskRCNNNode(object):
         self._visualization = rospy.get_param('~visualization', True)
 
         # Create model object in inference mode.
-        rospy.loginfo("Creating model")
+        rospy.logdebug('Creating model')
         self._model = modellib.MaskRCNN(mode="inference", model_dir="",
                                         config=config)
         # Load weights trained on MS-COCO
@@ -68,7 +69,7 @@ class MaskRCNNNode(object):
         if model_path == COCO_MODEL_PATH and not os.path.exists(COCO_MODEL_PATH):
             utils.download_trained_weights(COCO_MODEL_PATH)
 
-        rospy.loginfo("CLoading weights")
+        rospy.logdebug('Loading weights')
         self._model.load_weights(model_path, by_name=True)
 
         self._class_names = rospy.get_param('~class_names', CLASS_NAMES)
@@ -81,13 +82,11 @@ class MaskRCNNNode(object):
         self._publish_rate = rospy.get_param('~publish_rate', 100)
 
     def run(self):
-        rospy.loginfo("Running...")
+        rospy.loginfo('Running...')
         self._result_pub = rospy.Publisher('/mask_rcnn/result', Result, queue_size=1)
         vis_pub = rospy.Publisher('~visualization', Image, queue_size=1)
         sub = rospy.Subscriber('~input', Image,
                                self._image_callback, queue_size=1) #/camera/rgb/image_color
-        #sub = rospy.Subscriber('/camera/rgb/image_color', Image,
-        #                       self._image_callback, queue_size=1)
 
 
         rate = rospy.Rate(self._publish_rate)
@@ -105,10 +104,12 @@ class MaskRCNNNode(object):
                 build_result_time = 0
                 publish_time = 0
                 visualize_time = 0
+                
+                # Convert image
                 np_image = self._cv_bridge.imgmsg_to_cv2(msg, 'bgr8')
 
                 # Run detection
-                rospy.loginfo("Running detection")
+                rospy.loginfo('Running detection')
                 start = timer()
                 results = self._model.detect([np_image], verbose=0)
                 result = results[0]
@@ -137,11 +138,11 @@ class MaskRCNNNode(object):
                     visualize_time = end - start
                
                 # Print time results
-                rospy.loginfo("-- Timing --")
-                rospy.loginfo("Detection:     %s", detection_time)
-                rospy.loginfo("Build result:  %s", build_result_time)
-                rospy.loginfo("Publish:       %s", publish_time)
-                rospy.loginfo("Visualization: %s", visualize_time)
+                rospy.loginfo('-- Timing --')
+                rospy.loginfo('Detection:     %s', detection_time)
+                rospy.loginfo('Build result:  %s', build_result_time)
+                rospy.loginfo('Publish:       %s', publish_time)
+                rospy.loginfo('Visualization: %s', visualize_time)
 
             rate.sleep()
 
@@ -196,7 +197,7 @@ class MaskRCNNNode(object):
         return result
 
     def _image_callback(self, msg):
-        rospy.logdebug("Get an image")
+        rospy.logdebug('Getting image')
         if self._msg_lock.acquire(False):
             self._last_msg = msg
             self._msg_lock.release()

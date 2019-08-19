@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
     <!--node name="mask_rcnn" pkg="mask_rcnn_ros" type="mask_rcnn_node" output="screen">
         <remap from="~input" to="/camera/rgb/image_color" />

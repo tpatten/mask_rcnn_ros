@@ -10,6 +10,11 @@ add_message_files(
     Result.msg
 )
 
+add_service_files(
+  FILES
+    MaskRcnn.srv
+    OpenImg.srv
+)
 
 generate_messages(
   DEPENDENCIES std_msgs sensor_msgs
@@ -24,7 +29,7 @@ catkin_package(CATKIN_DEPENDS message_runtime)
 #############
 
 install(PROGRAMS
-  nodes/mask_rcnn_node
+  nodes/mask_rcnn_node.py nodes/mask_rcnn_service.py nodes/mask_rcnn_client.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

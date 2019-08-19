@@ -1733,6 +1733,7 @@ class MaskRCNN():
         self.model_dir = model_dir
         self.set_log_dir()
         self.keras_model = self.build(mode=mode, config=config)
+        self.keras_model._make_predict_function()
 
     def build(self, mode, config):
         """Build Mask R-CNN architecture.
@@ -1939,6 +1940,7 @@ class MaskRCNN():
                              [detections, mrcnn_class, mrcnn_bbox,
                                  mrcnn_mask, rpn_rois, rpn_class, rpn_bbox],
                              name='mask_rcnn')
+        #model._make_predict_function()
 
         # Add multi-GPU support.
         if config.GPU_COUNT > 1:

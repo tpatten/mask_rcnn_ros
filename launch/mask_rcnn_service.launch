@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="mask_rcnn" pkg="mask_rcnn_ros" type="mask_rcnn_service.py" output="screen">
+        <param name="~service_name" value="mask_rcnn_service" />
+        <param name="~visualize" value="true" />
+        <param name="~visualization_topic" value="/mask_rcnn/visualization" />
+    </node>
+</launch>

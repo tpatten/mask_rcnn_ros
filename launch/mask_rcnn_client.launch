@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="mask_rcnn_client" pkg="mask_rcnn_ros" type="mask_rcnn_client.py" output="screen">
+        <param name="~service_name" value="mask_rcnn_service" />
+        <param name="~image_topic" value="/camera/rgb/image_color" />
+    </node>
+</launch> 
