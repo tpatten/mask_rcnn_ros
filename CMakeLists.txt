@@ -13,7 +13,6 @@ add_message_files(
 add_service_files(
   FILES
     MaskRcnn.srv
-    OpenImg.srv
 )
 
 generate_messages(
